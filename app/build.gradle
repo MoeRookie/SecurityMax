@@ -15,7 +15,7 @@ android {
         // 2.2. 倒数第二位: 更新部分功能
         // 2.3. 第一位: 项目重大更新(代码重构、大部分功能添加、界面的整体修改)
         // 3. 注* : 版本名称定义的特殊化归根结底依赖于产品经理
-        versionName "1.0.0"
+        versionName "1.0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
