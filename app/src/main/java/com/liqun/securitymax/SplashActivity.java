@@ -11,6 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.liqun.securitymax.utils.StreamUtils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -81,10 +84,22 @@ public class SplashActivity extends AppCompatActivity {
                         // 6.将流转换成字符串(工具类封装)
                         String json = StreamUtils.stream2String(is);
                         Log.e(TAG, json);
+                        // 7.json解析
+                        JSONObject jsonObject = new JSONObject(json);
+                        String versionName = jsonObject.getString("versionName");
+                        String versionDes = jsonObject.getString("versionDes");
+                        String versionCode = jsonObject.getString("versionCode");
+                        String downloadUrl = jsonObject.getString("downloadUrl");
+                        Log.e(TAG, versionName);
+                        Log.e(TAG, versionDes);
+                        Log.e(TAG, versionCode);
+                        Log.e(TAG, downloadUrl);
                     }
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
