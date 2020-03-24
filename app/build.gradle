@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId "com.liqun.securitymax"
         minSdkVersion 15
-        targetSdkVersion 29
+        targetSdkVersion 22
         // eg.本地应用版本号1,服务器端相同包名应用的版本号2,有必要提示用户更新
         versionCode 1
         // 1. 版本名称的长度、每一位的意义由产品经理决策
