@@ -1,14 +1,20 @@
-package com.liqun.securitymax;
+package com.liqun.securitymax.activity;
 
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.liqun.securitymax.R;
 import com.liqun.securitymax.utils.StreamUtils;
 
 import org.json.JSONException;
@@ -22,9 +28,55 @@ import java.net.URL;
 
 public class SplashActivity extends AppCompatActivity {
     private static final String TAG = SplashActivity.class.getSimpleName();
+    /**
+     * 更新版本的状态码
+     */
+    private static final int UPDATE_VERSION = 100;
+    /**
+     * 进入应用程序主界面的状态码
+     */
+    private static final int ENTER_HOME = 101;
+    /**
+     * url地址出错的状态码
+     */
+    private static final int URL_ERROR = 102;
+    private static final int IO_ERROR = 103;
+    private static final int JSON_ERROR = 104;
 
     private TextView mTvVersionName;
     private int mLocalVersionCode;
+    @SuppressLint("HandlerLeak")
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            switch (msg.what) {
+                case UPDATE_VERSION:
+                    // 弹出对话框,提示用户更新
+                    break;
+                case ENTER_HOME:
+                    // 进入应用程序主界面,activity的跳转过程
+                    enterHome();
+                    break;
+                case URL_ERROR:
+                    break;
+                case IO_ERROR:
+                    break;
+                case JSON_ERROR:
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    };
+
+    /**
+     * 进入应用程序主界面
+     */
+    private void enterHome() {
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+        // 在开启一个新的界面后,将导航界面关闭(导航界面只可见一次)
+        finish();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +114,14 @@ public class SplashActivity extends AppCompatActivity {
         new Thread(){
             @Override
             public void run() {
+                Message msg = Message.obtain();
+                long startTime = System.currentTimeMillis();
                 // 发送请求获取数据,参数则为请求json的链接地址
                 // http://10.205.3.24:8080/update.json 测试阶段不是最优
                 // 仅限于模拟器访问电脑的tomcat(10.0.2.2)
                 try {
                     // 1.封装url地址
-                    URL url = new URL("http://10.205.3.24:8080/update.json");
+                    URL url = new URL("http://192.168.1.106:8080/update.json");
                     // 2.开启一个链接
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     // 3.设置常见请求参数(请求头)
@@ -86,21 +140,46 @@ public class SplashActivity extends AppCompatActivity {
                         Log.e(TAG, json);
                         // 7.json解析
                         JSONObject jsonObject = new JSONObject(json);
+                        // debug调试, 解决问题
                         String versionName = jsonObject.getString("versionName");
                         String versionDes = jsonObject.getString("versionDes");
                         String versionCode = jsonObject.getString("versionCode");
                         String downloadUrl = jsonObject.getString("downloadUrl");
+                        // 日志打印
                         Log.e(TAG, versionName);
                         Log.e(TAG, versionDes);
                         Log.e(TAG, versionCode);
                         Log.e(TAG, downloadUrl);
+                        // 8.比对版本号(服务器版本号>本地版本号,提示用户更新)
+                        if (mLocalVersionCode < Integer.parseInt(versionCode)) {
+                            // 提示用户更新,弹出对话框(UI),消息机制
+                            msg.what = UPDATE_VERSION;
+                        }else{
+                            // 进入应用程序主界面
+                            msg.what = ENTER_HOME;
+                        }
                     }
                 } catch (MalformedURLException e) {
+                    msg.what = URL_ERROR;
                     e.printStackTrace();
                 } catch (IOException e) {
+                    msg.what = IO_ERROR;
                     e.printStackTrace();
                 } catch (JSONException e) {
+                    msg.what = JSON_ERROR;
                     e.printStackTrace();
+                }finally {
+                    // 指定睡眠时间,请求网络的时长超过5秒则不做处理
+                    // 请求网络的时长不超过5秒,强制让其睡满5秒钟
+                    long endTime = System.currentTimeMillis();
+                    if (endTime - startTime < 5000) {
+                        try {
+                            Thread.sleep(5000-(endTime-startTime));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    mHandler.sendMessage(msg);
                 }
             }
         }.start();
