@@ -15,6 +15,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -117,6 +118,15 @@ public class SplashActivity extends AppCompatActivity {
                 enterHome();
             }
         });
+        // 点击取消事件监听
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                // 即使用户点击取消,也需要让其进入应用程序主界面
+                dialog.dismiss();
+                enterHome();
+            }
+        });
         builder.show();
     }
 
@@ -182,7 +192,14 @@ public class SplashActivity extends AppCompatActivity {
         // 设置安装的类型
         // intent.setType("application/vnd.android.package-archive");
         intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
-        startActivity(intent);
+        startActivityForResult(intent,0);
+    }
+
+    // 开启一个activity后,返回结果调用的方法
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        enterHome();
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
