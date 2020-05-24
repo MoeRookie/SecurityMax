@@ -220,7 +220,7 @@ public class SplashActivity extends AppCompatActivity {
                 // 仅限于模拟器访问电脑的tomcat(10.0.2.2)
                 try {
                     // 1.封装url地址
-                    URL url = new URL("http://192.168.1.106:8080/update.json");
+                    URL url = new URL("http://172.20.10.4:8080/update.json");
                     // 2.开启一个链接
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     // 3.设置常见请求参数(请求头)
