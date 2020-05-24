@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -16,6 +17,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.liqun.securitymax.R;
 import com.liqun.securitymax.utils.StreamUtils;
 import com.liqun.securitymax.utils.ToastUtil;
@@ -23,6 +28,7 @@ import com.liqun.securitymax.utils.ToastUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -49,6 +55,7 @@ public class SplashActivity extends AppCompatActivity {
     private TextView mTvVersionName;
     private int mLocalVersionCode;
     private String mVersionDes;
+    private String mDownloadUrl;
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler(){
         @Override
@@ -95,7 +102,9 @@ public class SplashActivity extends AppCompatActivity {
         builder.setPositiveButton("立即更新", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
                 // 下载apk,apk链接地址-downloadUrl
+                downloadApk();
             }
         });
         // 消极按钮,稍后再说
@@ -108,6 +117,54 @@ public class SplashActivity extends AppCompatActivity {
             }
         });
         builder.show();
+    }
+
+    private void downloadApk() {
+        // apk下载链接地址,放置apk的所在路径
+        // 1.判断sd卡是否可用,sd卡是否挂载上
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            // 2.获取sd路径
+            String path = Environment.getExternalStorageDirectory().getAbsolutePath() +
+                    File.separator + "SecurityMax.apk";
+            // 3.发送请求,获取apk并且放置到指定路径
+            HttpUtils httpUtils = new HttpUtils();
+            // 4.发送请求,传递参数(下载地址,下载应用放置位置)
+            httpUtils.download(mDownloadUrl, path, new RequestCallBack<File>() {
+                @Override
+                public void onSuccess(ResponseInfo<File> responseInfo) {
+                    // 下载成功(下载过后放置在sd卡中的apk)
+                    Log.e(TAG, "下载成功");
+                    File file = responseInfo.result;
+                    // 提示用户安装
+                }
+
+                @Override
+                public void onFailure(HttpException e, String s) {
+                    Log.e(TAG, "下载失败");
+                }
+
+                // 刚刚开始下载的方法
+                @Override
+                public void onStart() {
+                    super.onStart();
+                    Log.e(TAG, "刚刚开始下载");
+                }
+
+                /**
+                 * 下载过程中的方法
+                 * @param total 下载apk的总大小
+                 * @param current 当前下载位置
+                 * @param isUploading 是否正在下载
+                 */
+                @Override
+                public void onLoading(long total, long current, boolean isUploading) {
+                    super.onLoading(total, current, isUploading);
+                    Log.e(TAG, "下载中 . . .");
+                    Log.e(TAG, "total = " + total);
+                    Log.e(TAG, "current = " + current);
+                }
+            });
+        }
     }
 
     /**
@@ -186,12 +243,12 @@ public class SplashActivity extends AppCompatActivity {
                         String versionName = jsonObject.getString("versionName");
                         mVersionDes = jsonObject.getString("versionDes");
                         String versionCode = jsonObject.getString("versionCode");
-                        String downloadUrl = jsonObject.getString("downloadUrl");
+                        mDownloadUrl = jsonObject.getString("downloadUrl");
                         // 日志打印
                         Log.e(TAG, versionName);
                         Log.e(TAG, mVersionDes);
                         Log.e(TAG, versionCode);
-                        Log.e(TAG, downloadUrl);
+                        Log.e(TAG, mDownloadUrl);
                         // 8.比对版本号(服务器版本号>本地版本号,提示用户更新)
                         if (mLocalVersionCode < Integer.parseInt(versionCode)) {
                             // 提示用户更新,弹出对话框(UI),消息机制
