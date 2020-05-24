@@ -2,6 +2,7 @@ package com.liqun.securitymax.activity;
 
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -12,10 +13,12 @@ import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.liqun.securitymax.R;
 import com.liqun.securitymax.utils.StreamUtils;
+import com.liqun.securitymax.utils.ToastUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,6 +48,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private TextView mTvVersionName;
     private int mLocalVersionCode;
+    private String mVersionDes;
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler(){
         @Override
@@ -52,21 +56,59 @@ public class SplashActivity extends AppCompatActivity {
             switch (msg.what) {
                 case UPDATE_VERSION:
                     // 弹出对话框,提示用户更新
+                    showUpdateDialog();
                     break;
                 case ENTER_HOME:
                     // 进入应用程序主界面,activity的跳转过程
                     enterHome();
                     break;
                 case URL_ERROR:
+                    ToastUtil.show(getApplicationContext(),"url异常");
+                    enterHome();
                     break;
                 case IO_ERROR:
+                    ToastUtil.show(getApplicationContext(),"读取异常");
+                    enterHome();
                     break;
                 case JSON_ERROR:
+                    ToastUtil.show(getApplicationContext(),"json解析异常");
+                    enterHome();
                     break;
             }
             super.handleMessage(msg);
         }
     };
+
+    /**
+     * 弹出对话框,提示用户更新
+     */
+    private void showUpdateDialog() {
+        // 对话框是依赖于 activity 存在的
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // 设置左上角图标
+        builder.setIcon(R.mipmap.ic_launcher);
+        // 设置标题
+        builder.setTitle("版本更新");
+        // 设置描述内容
+        builder.setMessage(mVersionDes);
+        // 积极按钮,立即更新
+        builder.setPositiveButton("立即更新", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 下载apk,apk链接地址-downloadUrl
+            }
+        });
+        // 消极按钮,稍后再说
+        builder.setNegativeButton("稍后再说", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 取消对话框,进入主界面
+                dialog.dismiss();
+                enterHome();
+            }
+        });
+        builder.show();
+    }
 
     /**
      * 进入应用程序主界面
@@ -142,12 +184,12 @@ public class SplashActivity extends AppCompatActivity {
                         JSONObject jsonObject = new JSONObject(json);
                         // debug调试, 解决问题
                         String versionName = jsonObject.getString("versionName");
-                        String versionDes = jsonObject.getString("versionDes");
+                        mVersionDes = jsonObject.getString("versionDes");
                         String versionCode = jsonObject.getString("versionCode");
                         String downloadUrl = jsonObject.getString("downloadUrl");
                         // 日志打印
                         Log.e(TAG, versionName);
-                        Log.e(TAG, versionDes);
+                        Log.e(TAG, mVersionDes);
                         Log.e(TAG, versionCode);
                         Log.e(TAG, downloadUrl);
                         // 8.比对版本号(服务器版本号>本地版本号,提示用户更新)
