@@ -12,6 +12,9 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -55,6 +58,7 @@ public class SplashActivity extends AppCompatActivity {
     private static final int JSON_ERROR = 104;
 
     private TextView mTvVersionName;
+    private RelativeLayout mRLRoot;
     private int mLocalVersionCode;
     private String mVersionDes;
     private String mDownloadUrl;
@@ -218,6 +222,16 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         initUI();
         initData();
+        initAnim();
+    }
+
+    /**
+     * 添加淡入动画效果
+     */
+    private void initAnim() {
+        AlphaAnimation anim = new AlphaAnimation(0, 1);
+        anim.setDuration(3000);
+        mRLRoot.setAnimation(anim);
     }
 
     /**
@@ -360,5 +374,6 @@ public class SplashActivity extends AppCompatActivity {
      */
     private void initUI() {
         mTvVersionName = findViewById(R.id.tv_version_name);
+        mRLRoot = findViewById(R.id.rl_root);
     }
 }
