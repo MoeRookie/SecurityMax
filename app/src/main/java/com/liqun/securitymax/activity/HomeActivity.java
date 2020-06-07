@@ -1,8 +1,10 @@
 package com.liqun.securitymax.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -49,6 +51,18 @@ public class HomeActivity extends AppCompatActivity {
         };
         // 九宫格控件设置数据适配器(等同ListView的数据适配器)
         mGvFunc.setAdapter(new MyAdapter());
+        // 注册九宫格单个条目点击事件
+        mGvFunc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override // position: 条目索引
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 8: // 跳转"设置中心"模块界面
+                        Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
+                        startActivity(intent);
+                        break;
+                }
+            }
+        });
     }
 
     private class MyAdapter extends BaseAdapter {
