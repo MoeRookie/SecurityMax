@@ -22,4 +22,14 @@
         android:text="秋天秋天悄悄过去,留下小秘密,啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="marquee_forever"/>
+    <!--
+        android:numColumns="3" 指定列数
+        android:verticalSpacing="10dp" 指定内部条目竖直方向间距为10dp
+     -->
+    <GridView
+        android:id="@+id/gv_func"
+        android:numColumns="3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:verticalSpacing="10dp"/>
 </LinearLayout>
