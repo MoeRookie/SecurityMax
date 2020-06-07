@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.liqun.securitymax.R;
 
 public class SettingItemView extends RelativeLayout {
+    private CheckBox mCbBox;
+    private TextView mTvDes;
     public SettingItemView(Context context) {
         this(context,null);
     }
@@ -24,7 +26,22 @@ public class SettingItemView extends RelativeLayout {
         View.inflate(context, R.layout.item_setting, this);
         // 自定义组合控件中的标题描述
         TextView tvTitle = findViewById(R.id.tv_title);
-        TextView tvDes = findViewById(R.id.tv_des);
-        CheckBox cbBox = findViewById(R.id.cb_box);
+        mTvDes = findViewById(R.id.tv_des);
+        mCbBox = findViewById(R.id.cb_box);
+    }
+
+    /**
+     * 判断是否开启的方法
+     * @return 返回当前SettingItemView的选中状态 -> true(开启: checkBox返回true),false(关闭,checkBox返回false)
+     */
+    public boolean isCheck(){
+        // 由checkBox的选中结果,决定当前条目是否开启
+        return mCbBox.isChecked();
+    }
+
+    public void setCheck(boolean isCheck){
+        // 当前条目在点击的过程中,mCbBox的选中状态也在跟随isCheck变化
+        mCbBox.setChecked(isCheck);
+        mTvDes.setText("自动更新已"+(isCheck?"开启":"关闭"));
     }
 }
