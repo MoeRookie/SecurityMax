@@ -10,8 +10,10 @@
         android:ellipsize="end" 添加省略点的所在位置
         想让文字出现跑马灯效果,必须让其获取焦点
         android:marqueeRepeatLimit="marquee_forever" 一直滚动下去
+
+        自定义控件达到文本滚动的效果(其实就是重写原有的TextView,让其一直能够获取到焦点)
     -->
-    <TextView
+    <com.liqun.securitymax.view.FocusTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"
@@ -19,7 +21,5 @@
         android:singleLine="true"
         android:text="秋天秋天悄悄过去,留下小秘密,啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊"
         android:ellipsize="marquee"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:marqueeRepeatLimit="marquee_forever"/>
 </LinearLayout>

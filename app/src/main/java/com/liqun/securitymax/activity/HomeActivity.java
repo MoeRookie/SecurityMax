@@ -1,6 +1,7 @@
 package com.liqun.securitymax.activity;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
