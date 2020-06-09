@@ -10,8 +10,15 @@ import android.widget.TextView;
 import com.liqun.securitymax.R;
 
 public class SettingItemView extends RelativeLayout {
+    private static final String NAME_SPACE = "http://schemas.android.com/apk/res/com.liqun.securitymax";
+    private static final String DES_TITLE = "desTitle";
+    private static final String DES_OFF = "desOff";
+    private static final String DES_ON = "desOn";
     private CheckBox mCbBox;
     private TextView mTvDes;
+    private String mDesTitle;
+    private String mDesOff;
+    private String mDesOn;
     public SettingItemView(Context context) {
         this(context,null);
     }
@@ -30,6 +37,8 @@ public class SettingItemView extends RelativeLayout {
         mCbBox = findViewById(R.id.cb_box);
         // 获取自定义以及原生属性的操作,写在此处,从AttributeSet.attrs对象中获取
         initAttrs(attrs);
+        // 获取布局文件中定义的字符串, 赋值给自定义组合控件的标题
+        tvTitle.setText(mDesTitle);
     }
 
     /**
@@ -37,7 +46,10 @@ public class SettingItemView extends RelativeLayout {
      * @param attrs 构造方法中维护好的属性集合
      */
     private void initAttrs(AttributeSet attrs) {
-
+        // 通过名字空间+属性名称获取自定义控件的属性值
+        mDesTitle = attrs.getAttributeValue(NAME_SPACE,DES_TITLE);
+        mDesOff = attrs.getAttributeValue(NAME_SPACE,DES_OFF);
+        mDesOn = attrs.getAttributeValue(NAME_SPACE,DES_ON);
     }
 
     /**
@@ -52,6 +64,6 @@ public class SettingItemView extends RelativeLayout {
     public void setCheck(boolean isCheck){
         // 当前条目在点击的过程中,mCbBox的选中状态也在跟随isCheck变化
         mCbBox.setChecked(isCheck);
-        mTvDes.setText("自动更新已"+(isCheck?"开启":"关闭"));
+        mTvDes.setText(isCheck?mDesOn:mDesOff);
     }
 }
