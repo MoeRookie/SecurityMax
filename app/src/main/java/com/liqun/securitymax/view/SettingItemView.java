@@ -28,6 +28,16 @@ public class SettingItemView extends RelativeLayout {
         TextView tvTitle = findViewById(R.id.tv_title);
         mTvDes = findViewById(R.id.tv_des);
         mCbBox = findViewById(R.id.cb_box);
+        // 获取自定义以及原生属性的操作,写在此处,从AttributeSet.attrs对象中获取
+        initAttrs(attrs);
+    }
+
+    /**
+     * 返回属性集合中自定义属性的属性值
+     * @param attrs 构造方法中维护好的属性集合
+     */
+    private void initAttrs(AttributeSet attrs) {
+
     }
 
     /**
