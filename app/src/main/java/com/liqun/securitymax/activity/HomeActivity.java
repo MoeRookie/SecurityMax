@@ -91,7 +91,42 @@ public class HomeActivity extends AppCompatActivity {
      * 确认密码对话框
      */
     private void showConfirmPsdDialog() {
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog dialog = builder.create();
+        final View view = View.inflate(this, R.layout.dialog_confirm_psd, null);
+        // 让对话框显示一个自定义的界面效果
+        dialog.setView(view);
+        dialog.show();
+        Button btnSubmit = view.findViewById(R.id.btn_submit);
+        Button btnCancel = view.findViewById(R.id.btn_cancel);
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText etConfirmPsd = view.findViewById(R.id.et_confirm_psd);
+                String confirmPsd = etConfirmPsd.getText().toString().trim();
+                if (!TextUtils.isEmpty(confirmPsd)) {
+                    String setPsd = SpUtils.getString(getApplicationContext(), ConstantValue.MOBILE_SAFE_PSD, "");
+                    if (setPsd.equals(confirmPsd)) {
+                        // 进入应用的手机防盗模块
+                        Intent intent = new Intent(getApplicationContext(), TestActivity.class);
+                        startActivity(intent);
+                        // 跳转到新的界面以后需要去隐藏对话框
+                        dialog.dismiss();
+                    }else{
+                        ToastUtil.show(getApplicationContext(), "确认密码错误");
+                    }
+                }else{
+                    // 提示用户密码输入有为空的情况
+                    ToastUtil.show(getApplicationContext(), "请输入密码");
+                }
+            }
+        });
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 
     /**
@@ -122,6 +157,7 @@ public class HomeActivity extends AppCompatActivity {
                         startActivity(intent);
                         // 跳转到新的界面以后需要去隐藏对话框
                         dialog.dismiss();
+                        SpUtils.putString(getApplicationContext(), ConstantValue.MOBILE_SAFE_PSD, setPsd);
                     }else{
                         ToastUtil.show(getApplicationContext(), "确认密码错误");
                     }
