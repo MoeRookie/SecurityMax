@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.liqun.securitymax.R;
 import com.liqun.securitymax.utils.ConstantValue;
+import com.liqun.securitymax.utils.MD5Utils;
 import com.liqun.securitymax.utils.SpUtils;
 import com.liqun.securitymax.utils.ToastUtils;
 
@@ -104,8 +105,9 @@ public class HomeActivity extends AppCompatActivity {
                 EditText etConfirmPsd = view.findViewById(R.id.et_confirm_psd);
                 String confirmPsd = etConfirmPsd.getText().toString().trim();
                 if (!TextUtils.isEmpty(confirmPsd)) {
+                    // 将存储在sp中32位的密码, 获取出来, 然后将输入的密码同样进行MD5, 然后与sp中存储的密码进行比对
                     String setPsd = SpUtils.getString(getApplicationContext(), ConstantValue.MOBILE_SAFE_PSD, "");
-                    if (setPsd.equals(confirmPsd)) {
+                    if (setPsd.equals(MD5Utils.encode(confirmPsd))) {
                         // 进入应用的手机防盗模块
                         Intent intent = new Intent(getApplicationContext(), TestActivity.class);
                         startActivity(intent);
@@ -156,7 +158,8 @@ public class HomeActivity extends AppCompatActivity {
                         startActivity(intent);
                         // 跳转到新的界面以后需要去隐藏对话框
                         dialog.dismiss();
-                        SpUtils.putString(getApplicationContext(), ConstantValue.MOBILE_SAFE_PSD, setPsd);
+                        SpUtils.putString(getApplicationContext(), ConstantValue.MOBILE_SAFE_PSD,
+                                MD5Utils.encode(setPsd));
                     }else{
                         ToastUtils.show(getApplicationContext(), "确认密码错误");
                     }
