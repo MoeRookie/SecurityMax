@@ -13,6 +13,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.liqun.securitymax.R;
@@ -94,7 +95,14 @@ public class HomeActivity extends AppCompatActivity {
      * 设置密码对话框
      */
     private void showSetPsdDialog() {
-
+        // 因为需要自己去定义对话框的展示样式, 所以需要调用 dialog.setView(view);
+        // view是由自己编写的xml转换成的对象(xml--->view)
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog dialog = builder.create();
+        View view = View.inflate(this, R.layout.dialog_set_psd, null);
+        // 让对话框显示一个自定义的界面效果
+        dialog.setView(view);
+        dialog.show();
     }
 
     private class MyAdapter extends BaseAdapter {
