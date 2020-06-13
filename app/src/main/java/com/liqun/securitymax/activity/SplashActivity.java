@@ -13,7 +13,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -30,7 +29,7 @@ import com.liqun.securitymax.R;
 import com.liqun.securitymax.utils.ConstantValue;
 import com.liqun.securitymax.utils.SpUtils;
 import com.liqun.securitymax.utils.StreamUtils;
-import com.liqun.securitymax.utils.ToastUtil;
+import com.liqun.securitymax.utils.ToastUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -78,15 +77,15 @@ public class SplashActivity extends AppCompatActivity {
                     enterHome();
                     break;
                 case URL_ERROR:
-                    ToastUtil.show(getApplicationContext(),"url异常");
+                    ToastUtils.show(getApplicationContext(),"url异常");
                     enterHome();
                     break;
                 case IO_ERROR:
-                    ToastUtil.show(getApplicationContext(),"读取异常");
+                    ToastUtils.show(getApplicationContext(),"读取异常");
                     enterHome();
                     break;
                 case JSON_ERROR:
-                    ToastUtil.show(getApplicationContext(),"json解析异常");
+                    ToastUtils.show(getApplicationContext(),"json解析异常");
                     enterHome();
                     break;
             }

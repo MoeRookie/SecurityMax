@@ -3,7 +3,7 @@ package com.liqun.securitymax.utils;
 import android.content.Context;
 import android.widget.Toast;
 
-public class ToastUtil {
+public class ToastUtils {
     /**
      * @param ctx 上下文环境
      * @param msg 打印文本内容

@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -21,7 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.liqun.securitymax.R;
 import com.liqun.securitymax.utils.ConstantValue;
 import com.liqun.securitymax.utils.SpUtils;
-import com.liqun.securitymax.utils.ToastUtil;
+import com.liqun.securitymax.utils.ToastUtils;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -113,11 +112,11 @@ public class HomeActivity extends AppCompatActivity {
                         // 跳转到新的界面以后需要去隐藏对话框
                         dialog.dismiss();
                     }else{
-                        ToastUtil.show(getApplicationContext(), "确认密码错误");
+                        ToastUtils.show(getApplicationContext(), "确认密码错误");
                     }
                 }else{
                     // 提示用户密码输入有为空的情况
-                    ToastUtil.show(getApplicationContext(), "请输入密码");
+                    ToastUtils.show(getApplicationContext(), "请输入密码");
                 }
             }
         });
@@ -159,11 +158,11 @@ public class HomeActivity extends AppCompatActivity {
                         dialog.dismiss();
                         SpUtils.putString(getApplicationContext(), ConstantValue.MOBILE_SAFE_PSD, setPsd);
                     }else{
-                        ToastUtil.show(getApplicationContext(), "确认密码错误");
+                        ToastUtils.show(getApplicationContext(), "确认密码错误");
                     }
                 }else{
                     // 提示用户密码输入有为空的情况
-                    ToastUtil.show(getApplicationContext(), "请输入密码");
+                    ToastUtils.show(getApplicationContext(), "请输入密码");
                 }
             }
         });
