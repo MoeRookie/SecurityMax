@@ -2,6 +2,7 @@ package com.liqun.securitymax.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -15,6 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.liqun.securitymax.R;
+import com.liqun.securitymax.utils.ConstantValue;
+import com.liqun.securitymax.utils.SpUtils;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -56,6 +59,10 @@ public class HomeActivity extends AppCompatActivity {
             @Override // position: 条目索引
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
+                    case 0:
+                        // 开启对话框
+                        showDialog();
+                        break;
                     case 8: // 跳转"设置中心"模块界面
                         Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
                         startActivity(intent);
@@ -63,6 +70,31 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    private void showDialog() {
+        // 判断本地是否有存储密码(Sp 字符串)
+        String psd = SpUtils.getString(this, ConstantValue.MOBILE_SAFE_PSD, "");
+        if (TextUtils.isEmpty(psd)) {
+            // 1.初始设置密码对话框
+            showSetPsdDialog();
+        } else {
+            // 2.确认密码对话框
+            showConfirmPsdDialog();
+        }
+    }
+
+    /**
+     * 确认密码对话框
+     */
+    private void showConfirmPsdDialog() {
+
+    }
+
+    /**
+     * 设置密码对话框
+     */
+    private void showSetPsdDialog() {
+
     }
 
     private class MyAdapter extends BaseAdapter {
