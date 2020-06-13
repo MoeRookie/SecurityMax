@@ -95,7 +95,7 @@ public class HomeActivity extends AppCompatActivity {
         final AlertDialog dialog = builder.create();
         final View view = View.inflate(this, R.layout.dialog_confirm_psd, null);
         // 让对话框显示一个自定义的界面效果
-        dialog.setView(view);
+        dialog.setView(view, 0, 0, 0, 0);
         dialog.show();
         Button btnSubmit = view.findViewById(R.id.btn_submit);
         Button btnCancel = view.findViewById(R.id.btn_cancel);
@@ -140,7 +140,8 @@ public class HomeActivity extends AppCompatActivity {
         final AlertDialog dialog = builder.create();
         final View view = View.inflate(this, R.layout.dialog_set_psd, null);
         // 让对话框显示一个自定义的界面效果
-        dialog.setView(view);
+        // 为了兼容低版本, 给对话框设置布局的时候, 让其没有内边距(Android系统默认提供出来的)
+        dialog.setView(view, 0, 0, 0, 0);
         dialog.show();
         Button btnSubmit = view.findViewById(R.id.btn_submit);
         Button btnCancel = view.findViewById(R.id.btn_cancel);
