@@ -109,7 +109,7 @@ public class HomeActivity extends AppCompatActivity {
                     String setPsd = SpUtils.getString(getApplicationContext(), ConstantValue.MOBILE_SAFE_PSD, "");
                     if (setPsd.equals(MD5Utils.encode(confirmPsd))) {
                         // 进入应用的手机防盗模块
-                        Intent intent = new Intent(getApplicationContext(), TestActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), SetupOverActivity.class);
                         startActivity(intent);
                         // 跳转到新的界面以后需要去隐藏对话框
                         dialog.dismiss();
@@ -155,7 +155,7 @@ public class HomeActivity extends AppCompatActivity {
                 if (!TextUtils.isEmpty(setPsd) && !TextUtils.isEmpty(confirmPsd)) {
                     if (setPsd.equals(confirmPsd)) {
                         // 进入应用的手机防盗模块
-                        Intent intent = new Intent(getApplicationContext(), TestActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), SetupOverActivity.class);
                         startActivity(intent);
                         // 跳转到新的界面以后需要去隐藏对话框
                         dialog.dismiss();
