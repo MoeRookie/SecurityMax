@@ -5,8 +5,45 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
     <TextView
+        style="@style/TitleStyle"
+        android:text="1, 欢迎使用手机防盗"/>
+    <TextView
+        android:layout_margin="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="导航界面_1"
-        android:textColor="#000"/>
+        android:textColor="#000"
+        android:textSize="18sp"
+        android:text="您的手机防盗卫士"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@android:drawable/star_big_on"
+        android:gravity="center_vertical"
+        android:textColor="#000"
+        android:textSize="18sp"
+        android:text="sim卡变更报警"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@android:drawable/star_big_on"
+        android:gravity="center_vertical"
+        android:textColor="#000"
+        android:textSize="18sp"
+        android:text="GPS追踪"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@android:drawable/star_big_on"
+        android:gravity="center_vertical"
+        android:textColor="#000"
+        android:textSize="18sp"
+        android:text="远程数据销毁"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@android:drawable/star_big_on"
+        android:gravity="center_vertical"
+        android:textColor="#000"
+        android:textSize="18sp"
+        android:text="远程锁屏"/>
 </LinearLayout>
