@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.liqun.securitymax.R;
 import com.liqun.securitymax.utils.ConstantValue;
 import com.liqun.securitymax.utils.SpUtils;
+import com.liqun.securitymax.utils.ToastUtils;
 import com.liqun.securitymax.view.SettingItemView;
 
 public class Setup2Activity extends AppCompatActivity {
@@ -50,7 +51,7 @@ public class Setup2Activity extends AppCompatActivity {
                     // 6.2. 获取sim卡序列号
                     String simSerialNumber = manager.getSimSerialNumber();
                     // 6.3. 存储
-                    SpUtils.putString(getApplicationContext(),ConstantValue.SIM_SERIAL_NUM, simSerialNum);
+                    SpUtils.putString(getApplicationContext(),ConstantValue.SIM_SERIAL_NUM, simSerialNumber);
                 }else{
                     // 7.将存储sim卡序列号的节点从sp中删除
                     SpUtils.remove(getApplicationContext(), ConstantValue.SIM_SERIAL_NUM);
@@ -60,9 +61,14 @@ public class Setup2Activity extends AppCompatActivity {
     }
 
     public void nextPage(View view){
-        Intent intent = new Intent(this, Setup3Activity.class);
-        startActivity(intent);
-        finish();
+        String simSerialNum = SpUtils.getString(this, ConstantValue.SIM_SERIAL_NUM, "");
+        if (!TextUtils.isEmpty(simSerialNum)) {
+            Intent intent = new Intent(this, Setup3Activity.class);
+            startActivity(intent);
+            finish();
+        }else{
+            ToastUtils.show(this, "请绑定 sim 卡");
+        }
     }
     public void prePage(View view){
         Intent intent = new Intent(this, Setup1Activity.class);
