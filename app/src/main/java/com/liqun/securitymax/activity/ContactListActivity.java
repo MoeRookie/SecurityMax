@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
@@ -42,8 +43,21 @@ public class ContactListActivity extends AppCompatActivity {
                 // 3.循环游标, 直到没有数据为止
                 while (cursor.moveToNext()) {
                     String contactId = cursor.getString(0);
-                    Log.e(TAG, "contactId = "+contactId);
+                    if (!TextUtils.isEmpty(contactId)) {
+                        // 4.根据用户的唯一id,查询data表和mimetypes表生成的视图,获取data1和mimetype字段
+                        Cursor indexCursor = contentResolver.query(Uri.parse("content://com.android.contacts/data"),
+                                new String[]{"data1", "mimetype"},
+                                "raw_contact_id = ?", new String[]{contactId}, null);
+                        while (indexCursor.moveToNext()) {
+                            String data1 = indexCursor.getString(0);
+                            String mimetype = indexCursor.getString(1);
+                            Log.e(TAG, "data1 = " + data1);
+                            Log.e(TAG, "mimetype = " + mimetype);
+                        }
+                        indexCursor.close();
+                    }
                 }
+                cursor.close();
             }
         }.start();
     }
