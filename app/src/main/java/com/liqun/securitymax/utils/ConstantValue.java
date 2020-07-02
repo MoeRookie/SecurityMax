@@ -22,4 +22,8 @@ public class ConstantValue {
      * 选中联系人对应的key
      */
     public static final String CONTACT_PHONE = "contact_phone";
+    /**
+     * 是否开启防盗保护的key(总开关)
+     */
+    public static final String OPEN_SECURITY = "open_security";
 }
