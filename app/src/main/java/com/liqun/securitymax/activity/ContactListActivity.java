@@ -2,6 +2,7 @@ package com.liqun.securitymax.activity;
 
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,14 +33,15 @@ public class ContactListActivity extends AppCompatActivity {
 
     private ListView mLvContacts;
     private List<Map<String, String>> mContactList = new ArrayList<>();
+    private ContactAdapter mAdapter;
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler(){
         @SuppressLint("HandlerLeak")
         @Override
         public void handleMessage(@NonNull Message msg) {
             // 8. 填充数据适配器
-            ContactAdapter adapter = new ContactAdapter();
-            mLvContacts.setAdapter(adapter);
+            mAdapter = new ContactAdapter();
+            mLvContacts.setAdapter(mAdapter);
             super.handleMessage(msg);
         }
     };
@@ -78,13 +81,15 @@ public class ContactListActivity extends AppCompatActivity {
                         while (indexCursor.moveToNext()) {
                             String data = indexCursor.getString(0);
                             String type = indexCursor.getString(1);
+                            Log.e(TAG, "data: " + data);
+                            Log.e(TAG, "type: " + type);
                             // 6.区分类型给map填充数据
                             if ("vnd.android.cursor.item/phone_v2".equals(type)) {
-                                if (!TextUtils.isEmpty(data)) {
+                                if (!TextUtils.isEmpty(data) && !"null".equals(data)) {
                                     map.put("phone", data);
                                 }
                             } else if ("vnd.android.cursor.item/name".equals(type)) {
-                                if (!TextUtils.isEmpty(data)) {
+                                if (!TextUtils.isEmpty(data) && !"null".equals(data)) {
                                     map.put("name", data);
                                 }
                             }
@@ -102,6 +107,23 @@ public class ContactListActivity extends AppCompatActivity {
 
     private void initUI() {
         mLvContacts = findViewById(R.id.lv_contacts);
+        mLvContacts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (mAdapter != null) {
+                    // 1.获取点中条目指向集合对应的电话号码
+                    Map<String, String> map = mAdapter.getItem(position);
+                    // 2.获取当前条目指向集合对应的电话号码
+                    String phone = map.get("phone");
+                    // 3.此电话号码需要给第三个导航界面使用
+                    // 4.在结束当前界面回到前一个界面的时候,需要将数据返回回去
+                    Intent intent = new Intent();
+                    intent.putExtra("phone", phone);
+                    setResult(0, intent);
+                    finish();
+                }
+            }
+        });
     }
 
     private class ContactAdapter extends BaseAdapter {

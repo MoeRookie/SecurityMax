@@ -39,7 +39,13 @@ public class Setup3Activity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        // 返回当前界面的时候, 接收结果的方法
+        if (data != null) {
+            // 1.返回当前界面的时候, 接收结果的方法
+            String phone = data.getStringExtra("phone");
+            // 2.将特殊字符过滤(中划线转换成空字符串)
+            phone = phone.replace("-", "").replace(" ", "").trim();
+            mEtPNum.setText(phone);
+        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
