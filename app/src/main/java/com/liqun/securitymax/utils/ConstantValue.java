@@ -18,4 +18,8 @@ public class ConstantValue {
      * sim卡绑定序列号的key
      */
     public static final String SIM_SERIAL_NUM = "sim_serial_num";
+    /**
+     * 选中联系人对应的key
+     */
+    public static final String CONTACT_PHONE = "contact_phone";
 }
