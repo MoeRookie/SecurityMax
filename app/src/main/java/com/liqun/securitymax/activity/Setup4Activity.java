@@ -52,6 +52,7 @@ public class Setup4Activity extends AppCompatActivity {
             startActivity(intent);
             finish();
             SpUtils.putBoolean(this, ConstantValue.SETUP_OVER, true);
+            overridePendingTransition(R.anim.anim_next_in, R.anim.anim_next_out);
         }else{
             ToastUtils.show(getApplication(),"请开启防盗保护");
         }
@@ -61,5 +62,6 @@ public class Setup4Activity extends AppCompatActivity {
         Intent intent = new Intent(this, Setup3Activity.class);
         startActivity(intent);
         finish();
+        overridePendingTransition(R.anim.anim_pre_in, R.anim.anim_pre_out);
     }
 }
