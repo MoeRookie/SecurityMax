@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.telephony.SmsMessage;
 
 import com.liqun.securitymax.R;
+import com.liqun.securitymax.service.LocationService;
 import com.liqun.securitymax.utils.ConstantValue;
 import com.liqun.securitymax.utils.SpUtils;
 
@@ -32,6 +33,11 @@ public class SmsReceiver extends BroadcastReceiver {
                     MediaPlayer player = MediaPlayer.create(context, R.raw.ylzs);
                     player.setLooping(true); // 设置循环播放
                     player.start();
+                }
+                // 8.判断是否包含位置相关的关键字
+                if (content.contains("#*location*#")) {
+                    // 9.开启获取位置的服务
+                    context.startService(new Intent(context, LocationService.class));
                 }
             }
         }
