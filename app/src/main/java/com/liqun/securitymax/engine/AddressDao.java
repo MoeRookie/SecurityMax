@@ -16,6 +16,7 @@ public class AddressDao {
      * @param phone 待查询的电话号码
      */
     public static String getAddress(String phone){
+        // 正则表达式, 匹配手机号码
         phone = phone.substring(0, 7);
         // 02. 开启数据库连接(只读的形式打开)
         SQLiteDatabase database = SQLiteDatabase.openDatabase(path, null, OPEN_READONLY);
@@ -26,6 +27,14 @@ public class AddressDao {
         if (cursor.moveToNext()) {
             String outkey = cursor.getString(0);
             Log.e(TAG, "outkey = " + outkey);
+            // 05. 通过data1查询到的结果, 作为外键查询data2
+            Cursor indexCursor = database.query("data2", new String[]{"location"},
+                    "id = ?", new String[]{outkey}, null, null, null);
+            // 06. 获取查询到的电话归属地
+            if (indexCursor.moveToNext()) {
+                String address = indexCursor.getString(0);
+                Log.e(TAG, "address = " + address);
+            }
         }
         return null;
     }
