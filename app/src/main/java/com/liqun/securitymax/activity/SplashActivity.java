@@ -35,6 +35,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -224,6 +225,52 @@ public class SplashActivity extends AppCompatActivity {
         initUI();
         initData();
         initAnim();
+        initDB();
+    }
+
+    /**
+     * 初始化数据库
+     */
+    private void initDB() {
+        initAddressDB("address.db");
+    }
+
+    /**
+     * 拷贝数据库到files文件夹下
+     * @param dbName 数据库名称
+     */
+    private void initAddressDB(String dbName) {
+        // 01. 在files文件夹下创建同名dbName数据库文件
+        File files = getFilesDir();
+        File file = new File(files, dbName);
+        if (file.exists()) {
+            return;
+        }
+        InputStream is = null;
+        FileOutputStream fos = null;
+        // 02. 输入流读取第三方资产目录下的文件
+        try {
+            is = getAssets().open(dbName);
+            // 03. 将读取的内容写入到指定文件夹的指定文件中去
+            fos = new FileOutputStream(file);
+            // 04. 定义每次读取内容的大小
+            byte[] buffer = new byte[1024];
+            int length = -1; // 保存每次读取到的内容
+            while ((length = is.read(buffer)) != -1) {
+                fos.write(buffer, 0, length);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            if (fos != null && is != null) {
+                try {
+                    fos.close();
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     /**
