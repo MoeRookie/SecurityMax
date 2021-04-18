@@ -5,8 +5,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -60,8 +63,14 @@ public class QueryAddressActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String phone = mEtPhone.getText().toString().trim();
-                // 02. 查询是耗时操作, 开启子线程
-                query(phone);
+                if (!TextUtils.isEmpty(phone)) {
+                    // 02. 查询是耗时操作, 开启子线程
+                    query(phone);
+                }else{ // 抖动
+                    Animation shake = AnimationUtils.loadAnimation(
+                            getApplicationContext(), R.anim.shake);
+                    mEtPhone.startAnimation(shake);
+                }
             }
         });
         // 05. 实时查询(监听输入框文本变化)
