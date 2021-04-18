@@ -67,6 +67,20 @@ public class QueryAddressActivity extends AppCompatActivity {
                     // 02. 查询是耗时操作, 开启子线程
                     query(phone);
                 }else{ // 抖动
+                    /*
+                        //interpolator插补器,数学函数
+                        //自定义插补器
+                        shake.setInterpolator(new Interpolator() {
+                        	//y = 2x+1
+                        	@Override
+                        	public float getInterpolation(float arg0) {
+                        		return 0;
+                        	}
+                        });
+
+                        Interpolator
+                        CycleInterpolator
+                    */
                     Animation shake = AnimationUtils.loadAnimation(
                             getApplicationContext(), R.anim.shake);
                     mEtPhone.startAnimation(shake);
