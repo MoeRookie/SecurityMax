@@ -55,6 +55,10 @@ public class AddressService extends Service {
 
     @Override
     public void onDestroy() {
+        // 取消对电话状态的监听(开启服务的时候监听电话的对象)
+        if (mTm != null && mPhoneStateListener != null) {
+            mTm.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
+        }
         super.onDestroy();
     }
 }
