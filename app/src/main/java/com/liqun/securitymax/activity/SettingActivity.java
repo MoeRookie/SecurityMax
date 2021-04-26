@@ -1,5 +1,6 @@
 package com.liqun.securitymax.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -7,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.liqun.securitymax.R;
+import com.liqun.securitymax.service.AddressService;
 import com.liqun.securitymax.utils.ConstantValue;
 import com.liqun.securitymax.utils.SpUtils;
 import com.liqun.securitymax.view.SettingItemView;
@@ -21,6 +23,7 @@ public class SettingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_setting);
 
         initUpdate();
+        initAddress();
     }
 
     /**
@@ -41,6 +44,29 @@ public class SettingActivity extends AppCompatActivity {
                 mSivUpdate.setCheck(!isCheck);
                 // 将取反后的状态存储到相应的sp中
                 SpUtils.putBoolean(getApplicationContext(),ConstantValue.OPEN_UPDATE,!isCheck);
+            }
+        });
+    }
+
+    /**
+     * 是否显示电话号码归属地的方法
+     */
+    private void initAddress() {
+        final SettingItemView sivAddress = findViewById(R.id.siv_address);
+        // 点击过程中, 状态[是否开启电话号码归属地]的切换过程
+        sivAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 返回点击前的选中状态
+                boolean isCheck = sivAddress.isCheck();
+                sivAddress.setCheck(!isCheck);
+                if (!isCheck) {
+                    // 开启服务, 管理吐司
+                    startService(new Intent(getApplicationContext(), AddressService.class));
+                }else{
+                    // 关闭服务, 不需要显示吐司
+                    stopService(new Intent(getApplicationContext(), AddressService.class));
+                }
             }
         });
     }
