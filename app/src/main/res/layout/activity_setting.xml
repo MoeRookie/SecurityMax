@@ -22,4 +22,8 @@
         securitymax:desTitle="电话归属地显示设置"
         securitymax:desOff="归属地显示已关闭"
         securitymax:desOn="归属地显示已开启"/>
+    <com.liqun.securitymax.view.SettingClickView
+        android:id="@+id/scv_toast_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </LinearLayout>

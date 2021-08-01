@@ -26,4 +26,8 @@ public class ConstantValue {
      * 是否开启防盗保护的key(总开关)
      */
     public static final String OPEN_SECURITY = "open_security";
+    /**
+     * 吐司选择样式索引的key
+     */
+    public static final String TOAST_STYLE = "toast_style";
 }

@@ -12,6 +12,7 @@ import com.liqun.securitymax.service.AddressService;
 import com.liqun.securitymax.utils.ConstantValue;
 import com.liqun.securitymax.utils.ServiceUtils;
 import com.liqun.securitymax.utils.SpUtils;
+import com.liqun.securitymax.view.SettingClickView;
 import com.liqun.securitymax.view.SettingItemView;
 
 public class SettingActivity extends AppCompatActivity {
@@ -25,6 +26,7 @@ public class SettingActivity extends AppCompatActivity {
 
         initUpdate();
         initAddress();
+        initToastStyle();
     }
 
     /**
@@ -73,5 +75,17 @@ public class SettingActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void initToastStyle() {
+        SettingClickView scvToastStyle = findViewById(R.id.scv_toast_style);
+        // 话述
+        scvToastStyle.setTitle("设置归属地显示风格");
+        // 1.创建描述文字所在的String类型数组
+        String[] mToastStyleDesList = {"透明", "橙色", "蓝色", "灰色", "绿色"};
+        // 2.SP获取吐司显示样式的索引值(int), 用于获取描述文字
+        int toastStyleIndex = SpUtils.getInt(this, ConstantValue.TOAST_STYLE, 0);
+        // 3.通过索引, 获取字符串数组重的文字, 显示给描述内容控件
+        scvToastStyle.setDes(mToastStyleDesList[toastStyleIndex]);
     }
 }
