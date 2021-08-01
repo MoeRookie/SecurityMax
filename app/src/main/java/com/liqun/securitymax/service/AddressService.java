@@ -3,18 +3,26 @@
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PixelFormat;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-public class AddressService extends Service {
+import com.liqun.securitymax.R;
+
+ public class AddressService extends Service {
     private static final String TAG = AddressService.class.getSimpleName();
     private TelephonyManager mTm;
     private MyPhoneStateListener mPhoneStateListener;
+    private final WindowManager.LayoutParams mParams = new WindowManager.LayoutParams();
     @Override
     public void onCreate() {
         // 第一次开启服务以后, 就需要去管理吐司的显示
@@ -50,7 +58,21 @@ public class AddressService extends Service {
     }
 
     private void showToast(String phoneNumber) {
-        Toast.makeText(this, phoneNumber, Toast.LENGTH_SHORT).show();
+        final WindowManager.LayoutParams params = mParams;
+        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        params.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        params.format = PixelFormat.TRANSLUCENT;
+        // 在响铃的时候显示toast, 和电话类型一致
+        params.type = WindowManager.LayoutParams.TYPE_PHONE;
+        params.setTitle("Toast");
+        params.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+        //        | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE; 默认能够被触摸
+        // 指定吐司的所在位置(将吐司指定在左上角)
+        params.gravity = Gravity.LEFT + Gravity.TOP;
+        // 吐司显示效果(吐司布局文件), xml->view(吐司), 将吐司挂载到windowManager窗体上
+        View toast = View.inflate(this, R.layout.view_toast, null);
+        TextView tvToast = toast.findViewById(R.id.tv_toast);
     }
 
     @Nullable
