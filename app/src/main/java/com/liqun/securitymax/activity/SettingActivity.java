@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.liqun.securitymax.R;
 import com.liqun.securitymax.service.AddressService;
 import com.liqun.securitymax.utils.ConstantValue;
+import com.liqun.securitymax.utils.ServiceUtils;
 import com.liqun.securitymax.utils.SpUtils;
 import com.liqun.securitymax.view.SettingItemView;
 
@@ -53,6 +54,9 @@ public class SettingActivity extends AppCompatActivity {
      */
     private void initAddress() {
         final SettingItemView sivAddress = findViewById(R.id.siv_address);
+        // 对服务是否开的状态做显示
+        boolean isRunning = ServiceUtils.isRunning(this, AddressService.class.getName());
+        sivAddress.setCheck(isRunning);
         // 点击过程中, 状态[是否开启电话号码归属地]的切换过程
         sivAddress.setOnClickListener(new View.OnClickListener() {
             @Override
