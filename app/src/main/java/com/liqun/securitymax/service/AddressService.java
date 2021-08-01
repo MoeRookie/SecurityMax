@@ -1,10 +1,13 @@
 package com.liqun.securitymax.service;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -14,9 +17,11 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.liqun.securitymax.R;
+import com.liqun.securitymax.engine.AddressDao;
 
 public class AddressService extends Service {
     private static final String TAG = AddressService.class.getSimpleName();
@@ -25,6 +30,15 @@ public class AddressService extends Service {
     private final WindowManager.LayoutParams mParams = new WindowManager.LayoutParams();
     private WindowManager mWM;
     private View mToastView;
+    private TextView mTvToast;
+    private String mAddress;
+    @SuppressLint("HandlerLeak")
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            mTvToast.setText(mAddress);
+        }
+    };
 
     @Override
     public void onCreate() {
@@ -81,8 +95,21 @@ public class AddressService extends Service {
         params.gravity = Gravity.LEFT + Gravity.TOP;
         // 吐司显示效果(吐司布局文件), xml->view(吐司), 将吐司挂载到windowManager窗体上
         mToastView = View.inflate(this, R.layout.view_toast, null);
+        mTvToast = mToastView.findViewById(R.id.tv_toast);
         // 在窗体上挂载一个view(权限)
         mWM.addView(mToastView, mParams);
+        // 获取到了来电号码以后, 需要做来电号码查询
+        query(phoneNumber);
+    }
+
+    private void query(final String phoneNumber) {
+        new Thread(){
+            @Override
+            public void run() {
+                mAddress = AddressDao.getAddress(phoneNumber);
+                mHandler.sendEmptyMessage(0);
+            }
+        }.start();
     }
 
     @Nullable
