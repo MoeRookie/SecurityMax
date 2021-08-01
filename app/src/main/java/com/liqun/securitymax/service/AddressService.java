@@ -1,4 +1,4 @@
- package com.liqun.securitymax.service;
+package com.liqun.securitymax.service;
 
 import android.app.Service;
 import android.content.Context;
@@ -18,11 +18,14 @@ import androidx.annotation.Nullable;
 
 import com.liqun.securitymax.R;
 
- public class AddressService extends Service {
+public class AddressService extends Service {
     private static final String TAG = AddressService.class.getSimpleName();
     private TelephonyManager mTm;
     private MyPhoneStateListener mPhoneStateListener;
     private final WindowManager.LayoutParams mParams = new WindowManager.LayoutParams();
+    private WindowManager mWM;
+    private View mToastView;
+
     @Override
     public void onCreate() {
         // 第一次开启服务以后, 就需要去管理吐司的显示
@@ -32,10 +35,12 @@ import com.liqun.securitymax.R;
         mPhoneStateListener = new MyPhoneStateListener();
         // 02. 监听电话状态
         mTm.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+        // 获取窗体对象
+        mWM = (WindowManager) getSystemService(WINDOW_SERVICE);
         super.onCreate();
     }
 
-    class MyPhoneStateListener extends PhoneStateListener{
+    class MyPhoneStateListener extends PhoneStateListener {
         // 03. 手动重写, 电话状态发生改变会触发的方法
         @Override
         public void onCallStateChanged(int state, String phoneNumber) {
@@ -43,6 +48,10 @@ import com.liqun.securitymax.R;
                 // 空闲状态, 没有任何活动
                 case TelephonyManager.CALL_STATE_IDLE:
                     Log.e(TAG, "挂断电话,空闲了.......................");
+                    // 挂断电话的时候窗体需要移除吐司
+                    if (null != mWM && null != mToastView) {
+                        mWM.removeView(mToastView);
+                    }
                     break;
                 // 摘机状态, 至少有个电话活动(该活动是拨打或者是通话)
                 case TelephonyManager.CALL_STATE_OFFHOOK:
@@ -71,8 +80,9 @@ import com.liqun.securitymax.R;
         // 指定吐司的所在位置(将吐司指定在左上角)
         params.gravity = Gravity.LEFT + Gravity.TOP;
         // 吐司显示效果(吐司布局文件), xml->view(吐司), 将吐司挂载到windowManager窗体上
-        View toast = View.inflate(this, R.layout.view_toast, null);
-        TextView tvToast = toast.findViewById(R.id.tv_toast);
+        mToastView = View.inflate(this, R.layout.view_toast, null);
+        // 在窗体上挂载一个view(权限)
+        mWM.addView(mToastView, mParams);
     }
 
     @Nullable
