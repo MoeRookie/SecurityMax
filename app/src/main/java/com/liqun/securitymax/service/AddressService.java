@@ -1,4 +1,4 @@
-package com.liqun.securitymax.service;
+ package com.liqun.securitymax.service;
 
 import android.app.Service;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -41,10 +42,15 @@ public class AddressService extends Service {
                 // 响铃状态
                 case TelephonyManager.CALL_STATE_RINGING:
                     Log.e(TAG, "响铃了.......................");
+                    showToast(phoneNumber);
                     break;
             }
             super.onCallStateChanged(state, phoneNumber);
         }
+    }
+
+    private void showToast(String phoneNumber) {
+        Toast.makeText(this, phoneNumber, Toast.LENGTH_SHORT).show();
     }
 
     @Nullable
